@@ -4,6 +4,7 @@ exports.index = function (req, res, next) {
     User.find({}, (err, users) => {
         if (err)
             return next(err)
+        users.map(user => {user.password='';return user})
         res.send(users);
     })
 }
@@ -20,7 +21,9 @@ exports.create = function(req, res, next) {
         active: req.body.active,
     });
 
-    user.save(err => {
+    user.save((err,user_saved) => {
+        if (!user_saved)
+            return res.status(400).send(`Error: id ${id} already exist`)
         if (err)
             return next(err)
         res.send("User ["+user._id+"] created successfully")
@@ -32,15 +35,27 @@ exports.show = function (req, res, next) {
     User.findById(id, (err, user) => {
         if (err)
             return next(err)
+        user.password=''
         res.send(user)
     })
 }
 
 exports.delete = function (req, res, next) {
-    User.findByIdAndRemove(req.params.id, (err, user) => {
+    let id = req.params.id
+    var reg = new RegExp('^\\d+$')
+    if (!reg.test(id)) {
+        res.status(400).send(`${id} is not valid id`)
+        return
+    }
+    User.findByIdAndRemove(id, (err, user) => {
         if (err)
             return next(err)
-        res.send("User ["+user._id+"] deleted successfully")
+        else {
+            if (user)
+                res.status(200).send("User ["+user._id+"] deleted successfully")
+            else
+                res.status(400).send(`Error: id ${id} does not exist`)
+        }
     })
 }
 
