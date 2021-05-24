@@ -5,9 +5,9 @@ var positive_numbers = new RegExp('^\\d+$')
 exports.index = function (req, res, next) {
     User.find({}, (err, users) => {
         if (err)
-            return next(err)
-        users = users.map(user => {return {username:user.username,_id:user._id}})
-        res.send(users);
+            return res.status(500).send(`Unhandled error: ${err}`)
+        users = users.map(user => {return {_id:user._id,username:user.username}})
+        res.status(200).send(users);
     })
 }
 
@@ -25,10 +25,10 @@ exports.create = function(req, res, next) {
 
     user.save((err,user_saved) => {
         if (!user_saved)
-            return res.status(400).send(`Error: id ${id} already exist`)
-        if (err)
-            return next(err)
-        res.send("User ["+user._id+"] created successfully")
+            return res.status(400).send(`ID error: id ${user._id} already exist`)
+        else if (err)
+            return res.status(500).send(`Unhandled error: ${err}`)
+        res.status(201).send(`Information: user with id [${user._id}] created successfully`)
     })
 }
 
@@ -36,40 +36,41 @@ exports.show = function (req, res, next) {
     let id = req.params.id;
     User.findById(id, (err, user) => {
         if (err)
-            return next(err)
+            return res.status(500).send(`Unhandled error: ${err}`)
         user.password=''
-        res.send(user)
+        res.status(200).send(user)
     })
 }
 
 exports.delete = function (req, res, next) {
     let id = req.params.id
     if (!positive_numbers.test(id))
-        return res.status(400).send(`${id} is not valid id`)
+        return res.status(400).send(`ID error: ${id} is not valid id`)
     User.findByIdAndRemove(id, (err, user) => {
         if (err)
-            return next(err)
+            return res.status(500).send(`Unhandled error: ${err}`)
         else {
             if (user)
-                res.status(200).send("User ["+user._id+"] deleted successfully")
+                res.status(200).send(`Information: User [${user._id}] deleted successfully`)
             else
-                res.status(400).send(`Error: id ${id} does not exist`)
+                res.status(400).send(`Information: id ${id} does not exist`)
         }
     })
 }
 
 exports.update = function (req, res, next) {
     let id = req.params.id
+    let userRequest = req.body
     if (!positive_numbers.test(id))
         return res.status(400).send(`${id} is not valid id`)
-    User.findByIdAndUpdate(id, {$set: req.body}, (err, user) => {
+    if (parseInt(id)!==parseInt(userRequest._id))
+        return res.status(400).send(`Incongruence error: between data send and id to update`)
+    User.findByIdAndUpdate(id, {$set: userRequest}, (err, user) => {
         if (err)
-            return next(err)
+            return res.status(500).send(`Unhandled error: ${err}`)
         if (!user)
-            res.status(400).send(`Error: id ${id} does not exist`)
-        else if (user._id!==parseInt(id))
-            res.status(400).send(`Error: ids does not match, cannot update id`)
+            res.status(400).send(`ID error: id ${id} does not exist`)
         else
-            res.status(200).send("User ["+user._id+"] updated successfully")
+            res.status(200).send("Information: user with id ["+user._id+"] updated successfully")
     })
 }
