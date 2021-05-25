@@ -34,6 +34,8 @@ exports.create = function(req, res, next) {
 
 exports.show = function (req, res, next) {
     let id = req.params.id;
+    if (!positive_numbers.test(id))
+        return res.status(400).send(`ID error: ${id} is not valid id`)
     User.findById(id, (err, user) => {
         if (err)
             return res.status(500).send(`Unhandled error: ${err}`)
@@ -62,7 +64,7 @@ exports.update = function (req, res, next) {
     let id = req.params.id
     let userRequest = req.body
     if (!positive_numbers.test(id))
-        return res.status(400).send(`${id} is not valid id`)
+        return res.status(400).send(`ID error: ${id} is not valid id`)
     if (parseInt(id)!==parseInt(userRequest._id))
         return res.status(400).send(`Incongruence error: between data send and id to update`)
     User.findByIdAndUpdate(id, {$set: userRequest}, (err, user) => {
