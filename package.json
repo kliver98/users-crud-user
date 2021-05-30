@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "deploy:heroku": "git push heroku main"
+    "deploy:heroku": "git push heroku main",
+    "test:contract": "npx jest --testTimeout 30000 users-crud-user/test/contract/api/file.spec.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -20,7 +21,8 @@
   },
   "devDependencies": {
     "@pact-foundation/pact": "^9.15.5",
-    "dotenv": "^9.0.2"
+    "dotenv": "^9.0.2",
+    "jest": "^27.0.3"
   },
   "description": "Service for crud user",
   "main": "app.js",
