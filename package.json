@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "deploy:heroku": "git push heroku main",
-    "test:contract": "jest --testTimeout 30000 -c test/contract/jest.contract.config.js"
+    "test:contract": "jest --testTimeout 30000 -c test/contract/jest.contract.config.js --detectOpenHandles"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
