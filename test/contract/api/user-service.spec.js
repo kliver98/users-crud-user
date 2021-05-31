@@ -35,8 +35,15 @@ describe("Pact Verification", () => {
             pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
             providerBaseUrl: process.env.API,
             provider: "UsersCrudUser",
+            providerVersion: "1.0.0",
             pactBrokerToken: process.env.PACT_BROKER_TOKEN
         };
+
+        if (process.env.CI || process.env.PACT_PUBLISH_RESULTS) {
+            Object.assign(opts, {
+              publishVerificationResult: true,
+            });
+        }
 
         return new Verifier(opts).verifyProvider().then(output => {
             // console.log(output);
