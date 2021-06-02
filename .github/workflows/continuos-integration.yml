@@ -22,7 +22,7 @@ jobs:
     - run: npm run build --if-present
     - name: Run contract test
       env:
-        API: http://localhost:8080
+        API: http://localhost:3000
         MONGODB_URL: ${{ secrets.MONGODB_URL }}
         PACT_BROKER_BASE_URL: ${{ secrets.PACT_BROKER_BASE_URL }}
         PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
