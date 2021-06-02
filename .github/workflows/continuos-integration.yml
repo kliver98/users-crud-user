@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14.x
-      - run: npm ci
-      - run: npm run build --if-present
-      - name: Run contract test
-        env:
-          API: http://localhost:8080
-          MONGODB_URL: ${{ secrets.MONGODB_URL }}
-          PACT_BROKER_BASE_URL: ${{ secrets.PACT_BROKER_BASE_URL }}
-          PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
-        run: npm run test:contract
+    - uses: actions/checkout@v2
+    - name: Use Node.js 14.x
+    uses: actions/setup-node@v1
+    with:
+      node-version: 14.x
+    - run: npm ci
+    - run: npm run build --if-present
+    - name: Run contract test
+      env:
+        API: http://localhost:8080
+        MONGODB_URL: ${{ secrets.MONGODB_URL }}
+        PACT_BROKER_BASE_URL: ${{ secrets.PACT_BROKER_BASE_URL }}
+        PACT_BROKER_TOKEN: ${{ secrets.PACT_BROKER_TOKEN }}
+      run: npm run test:contract
