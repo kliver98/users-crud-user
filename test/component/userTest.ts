@@ -7,7 +7,7 @@ import swal from 'sweetalert2';
 import { UserService } from '../../controllers/user';
 import { User } from '../../models/users';
 
-const path = "https://users-crud-user.herokuapp.com/api/latest/users";
+const path = "http://localhost:3000/api/latest/users";
 
 const listUser: User[] = [
     {
