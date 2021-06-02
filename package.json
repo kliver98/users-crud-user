@@ -23,6 +23,7 @@
   "devDependencies": {
     "@pact-foundation/pact": "^9.15.5",
     "@shelf/jest-mongodb": "^1.2.5",
+    "@types/jest": "^26.0.23",
     "chai": "^4.3.4",
     "dotenv": "^9.0.2",
     "jest": "^27.0.3",
